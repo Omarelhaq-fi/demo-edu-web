@@ -124,6 +124,12 @@
                 background-position: -200% 0;
             }
         }
+
+        @media (max-width: 768px) {
+            .mobile-hidden {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -194,7 +200,7 @@
                     </div>
                     <div class="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-2xl transform lg:-rotate-2">
                         <img alt="Haytham Nashat Chemistry" class="w-full h-full object-cover"
-                            src="https://scontent.fcai20-3.fna.fbcdn.net/v/t1.15752-9/653758753_1281887263855823_73359001553609956_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_ohc=rfYDHmYN9lwQ7kNvwHWBCkF&_nc_oc=Adq-hYdjZcJf5R2bZBjGcglwCWNIFCSNgn1jl4EhF_m7yPOH79XwfVf3Di9t0CeM8Ns&_nc_zt=23&_nc_ht=scontent.fcai20-3.fna&_nc_ss=7a32e&oh=03_Q7cD4wHvRlWCwMvnlj-FZUyqLnAAHUKjMmcFqWWLUKBWeG0LiA&oe=69EEBA6C"
+                            src="https://scontent.fcai20-3.fna.fbcdn.net/v/t1.15752-9/653758753_1281887263855823_73359001553609956_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_ohc=rfYDHmYN9lwQ7kNvwHWBCkF&_nc_oc=Adq-hYdjZcJf5R2bZBjGcglwCWNIFCSNgn1jl4EhF_m7yPOH79XwfVf3Di9t0CeM8Ns&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fcai20-3.fna&_nc_ss=7a32e&oh=03_Q7cD4wHmrYKRWNy3PPd0vP0Qyb3Y_xwZ_f8X5eKXnBsoLX5GpA&oe=69EF632C"
                             onerror="this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuB7EGc0gqHPvfpXCsX_PuOyDxU1cKqCCQ0CYJeBUQemUta3oUKl7QZqJAr9wf768tGf9PIzbHDlr8v2YuJwqoRxL91039UqcljJEoI4ixWzg8q4mxzrNtn6l-xuXHuXyOlA4RNeYcGLkZFcmNxaYaxiw9Z6dquHuw_-AiAYOhAd7dj56e2Hpv5vDrRSlBvjOyfKHUxTDpAnkdjFMI_DE6ag-46xpyV3wZJlxEVolvd74gWqQcBbRALIrTxmy1HPS34vjcgnFFqqXTx4'" />
                     </div>
                 </div>
@@ -284,6 +290,9 @@
             
             <!-- Can add progress here later -->
             <div class="flex items-center gap-4 text-sm font-bold text-on-surface-variant dark:text-slate-400">
+                <button id="toggle-sidebar-btn" class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors md:hidden text-primary dark:text-primary-fixed flex items-center justify-center" onclick="toggleSidebar()" title="إظهار/إخفاء محتوى الدورة">
+                    <span class="material-symbols-outlined">menu_open</span>
+                </button>
                 <span class="material-symbols-outlined hidden sm:inline">school</span>
                 <button id="player-theme-btn" class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors text-violet-900 dark:text-violet-400">
                     <span class="material-symbols-outlined">dark_mode</span>
@@ -295,8 +304,11 @@
         <div class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden">
             <!-- Sidebar (Lessons List) - Left in RTL -->
             <div class="w-full h-2/5 md:h-auto md:w-80 lg:w-96 flex-shrink-0 border-t md:border-t-0 border-l border-outline-variant/20 dark:border-slate-800 bg-surface dark:bg-slate-900 flex flex-col transition-transform duration-300" id="player-sidebar">
-                <div class="p-4 border-b border-outline-variant/20 dark:border-slate-800">
+                <div class="p-4 border-b border-outline-variant/20 dark:border-slate-800 flex justify-between items-center">
                     <h3 class="font-bold text-on-surface dark:text-white">محتوى الدورة</h3>
+                    <button class="md:hidden p-2 -mr-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 text-outline transition-colors flex items-center justify-center" onclick="toggleSidebar()">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
                 </div>
                 
                 <div id="lessons-sidebar-list" class="flex-1 overflow-y-auto custom-scrollbar">
@@ -1003,6 +1015,9 @@
             document.getElementById('player-view').classList.remove('hidden');
             document.body.style.overflow = 'hidden'; // App-like scroll lock for player
             
+            // Ensure sidebar is visible when opening a new course
+            document.getElementById('player-sidebar').classList.remove('mobile-hidden');
+
             document.getElementById('active-course-title').innerText = course.title || "دورة جديدة";
             
             // Teacher add button inside sidebar
@@ -1023,6 +1038,10 @@
         window.closeCourseView = () => {
             activeCourseId = null;
             openProfile();
+        };
+
+        window.toggleSidebar = () => {
+            document.getElementById('player-sidebar').classList.toggle('mobile-hidden');
         };
 
         // --- Lesson Content Flow ---
