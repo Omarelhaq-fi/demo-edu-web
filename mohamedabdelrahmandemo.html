@@ -124,6 +124,12 @@
                 background-position: -200% 0;
             }
         }
+
+        @media (max-width: 768px) {
+            .mobile-hidden {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -215,7 +221,7 @@
                     <div class="w-24 h-1 bg-amber-400 rounded-full"></div>
                     <p
                         class="text-xl md:text-2xl text-on-surface-variant dark:text-slate-300 font-light leading-relaxed">
-                        القناص في المواد الفلسفية يضمن لك الدرجه الكامله في الفلسفه والمنطق</p>
+                        القناص في المواد الفلسفية محمد عبد الرحمن</p>
                 </div>
             </div>
         </section>
@@ -284,6 +290,9 @@
             
             <!-- Can add progress here later -->
             <div class="flex items-center gap-4 text-sm font-bold text-on-surface-variant dark:text-slate-400">
+                <button id="toggle-sidebar-btn" class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors md:hidden text-primary dark:text-primary-fixed flex items-center justify-center" onclick="toggleSidebar()" title="إظهار/إخفاء محتوى الدورة">
+                    <span class="material-symbols-outlined">menu_open</span>
+                </button>
                 <span class="material-symbols-outlined hidden sm:inline">school</span>
                 <button id="player-theme-btn" class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors text-violet-900 dark:text-violet-400">
                     <span class="material-symbols-outlined">dark_mode</span>
@@ -292,11 +301,14 @@
         </div>
 
         <!-- Main Split Area -->
-        <div class="flex flex-1 overflow-hidden">
+        <div class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden">
             <!-- Sidebar (Lessons List) - Left in RTL -->
-            <div class="w-full md:w-80 lg:w-96 flex-shrink-0 border-l border-outline-variant/20 dark:border-slate-800 bg-surface dark:bg-slate-900 flex flex-col transition-transform duration-300" id="player-sidebar">
-                <div class="p-4 border-b border-outline-variant/20 dark:border-slate-800">
+            <div class="w-full h-2/5 md:h-auto md:w-80 lg:w-96 flex-shrink-0 border-t md:border-t-0 border-l border-outline-variant/20 dark:border-slate-800 bg-surface dark:bg-slate-900 flex flex-col transition-transform duration-300" id="player-sidebar">
+                <div class="p-4 border-b border-outline-variant/20 dark:border-slate-800 flex justify-between items-center">
                     <h3 class="font-bold text-on-surface dark:text-white">محتوى الدورة</h3>
+                    <button class="md:hidden p-2 -mr-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 text-outline transition-colors flex items-center justify-center" onclick="toggleSidebar()">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
                 </div>
                 
                 <div id="lessons-sidebar-list" class="flex-1 overflow-y-auto custom-scrollbar">
@@ -1003,6 +1015,9 @@
             document.getElementById('player-view').classList.remove('hidden');
             document.body.style.overflow = 'hidden'; // App-like scroll lock for player
             
+            // Ensure sidebar is visible when opening a new course
+            document.getElementById('player-sidebar').classList.remove('mobile-hidden');
+
             document.getElementById('active-course-title').innerText = course.title || "دورة جديدة";
             
             // Teacher add button inside sidebar
@@ -1023,6 +1038,10 @@
         window.closeCourseView = () => {
             activeCourseId = null;
             openProfile();
+        };
+
+        window.toggleSidebar = () => {
+            document.getElementById('player-sidebar').classList.toggle('mobile-hidden');
         };
 
         // --- Lesson Content Flow ---
@@ -1337,9 +1356,11 @@
 
             if (lesson.type === 'video') {
                 stage.classList.add('bg-black');
-                const embedUrl = lesson.content.includes('/watch?v=') 
-                        ? lesson.content.replace('/watch?v=', '/embed/') 
-                        : lesson.content;
+                let embedUrl = lesson.content;
+                const ytMatch = lesson.content.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/)|[?&]v=)([^&?]{11})/);
+                if (ytMatch && ytMatch[1]) {
+                    embedUrl = 'https://www.youtube.com/embed/' + ytMatch[1];
+                }
                 stage.innerHTML = `<iframe class="w-full h-full border-0 absolute inset-0" src="${embedUrl}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
             } else if (lesson.type === 'quiz') {
                 stage.classList.remove('aspect-video');
