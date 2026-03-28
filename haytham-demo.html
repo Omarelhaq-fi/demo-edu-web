@@ -210,8 +210,8 @@
                     <span
                         class="text-tertiary dark:text-tertiary-fixed font-bold tracking-[0.2em] uppercase text-xs">الفلسفة
                         الأكاديمية</span>
-                    <h2 class="text-4xl md:text-5xl font-black text-on-surface dark:text-white tracking-tight">
-                       من انا؟</h2>
+                    <h2 class="text-4xl md:text-5xl font-black text-on-surface dark:text-white tracking-tight">رعاية
+                        المعرفة للعصر الحديث</h2>
                     <div class="w-24 h-1 bg-amber-400 rounded-full"></div>
                     <p
                         class="text-xl md:text-2xl text-on-surface-variant dark:text-slate-300 font-light leading-relaxed">
@@ -292,9 +292,9 @@
         </div>
 
         <!-- Main Split Area -->
-        <div class="flex flex-1 overflow-hidden">
+        <div class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden">
             <!-- Sidebar (Lessons List) - Left in RTL -->
-            <div class="w-full md:w-80 lg:w-96 flex-shrink-0 border-l border-outline-variant/20 dark:border-slate-800 bg-surface dark:bg-slate-900 flex flex-col transition-transform duration-300" id="player-sidebar">
+            <div class="w-full h-2/5 md:h-auto md:w-80 lg:w-96 flex-shrink-0 border-t md:border-t-0 border-l border-outline-variant/20 dark:border-slate-800 bg-surface dark:bg-slate-900 flex flex-col transition-transform duration-300" id="player-sidebar">
                 <div class="p-4 border-b border-outline-variant/20 dark:border-slate-800">
                     <h3 class="font-bold text-on-surface dark:text-white">محتوى الدورة</h3>
                 </div>
@@ -1337,9 +1337,11 @@
 
             if (lesson.type === 'video') {
                 stage.classList.add('bg-black');
-                const embedUrl = lesson.content.includes('/watch?v=') 
-                        ? lesson.content.replace('/watch?v=', '/embed/') 
-                        : lesson.content;
+                let embedUrl = lesson.content;
+                const ytMatch = lesson.content.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/)|[?&]v=)([^&?]{11})/);
+                if (ytMatch && ytMatch[1]) {
+                    embedUrl = 'https://www.youtube.com/embed/' + ytMatch[1];
+                }
                 stage.innerHTML = `<iframe class="w-full h-full border-0 absolute inset-0" src="${embedUrl}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
             } else if (lesson.type === 'quiz') {
                 stage.classList.remove('aspect-video');
