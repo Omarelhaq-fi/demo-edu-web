@@ -13,6 +13,7 @@
     <!-- Material Symbols -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
         tailwind.config = {
@@ -79,6 +80,57 @@
         }
     </script>
     <style>
+        :root {
+            --plyr-color-main: #6c45c0; /* Uses the surface-tint/purple */
+            --plyr-video-control-color-hover: #fff;
+        }
+
+        /* YouTube branding overlays — z-index 2 keeps them ABOVE the iframe but BELOW Plyr controls */
+        .plyr__video-embed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 200px;
+            height: 50px;
+            background: #000;
+            z-index: 2;
+            pointer-events: all;
+            cursor: default;
+        }
+        .plyr__video-embed::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: #000;
+            z-index: 2;
+            pointer-events: all;
+            cursor: default;
+        }
+        /* Force Plyr controls above the overlays */
+        .plyr__controls {
+            z-index: 20 !important;
+        }
+        .plyr__control--overlaid {
+            z-index: 20 !important;
+        }
+        /* Hide PIP, link, share, and any copy-URL buttons */
+        .plyr__control[data-plyr="share"],
+        .plyr__control[data-plyr="pip"],
+        .plyr__share,
+        .plyr__controls__item.plyr__control[href],
+        a.plyr__control {
+            display: none !important;
+        }
+        /* Disable right-click on player */
+        .plyr {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
         html {
             scroll-behavior: smooth;
         }
@@ -200,7 +252,7 @@
                     </div>
                     <div class="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-2xl transform lg:-rotate-2">
                         <img alt="Haytham Nashat Chemistry" class="w-full h-full object-cover"
-                            src="https://scontent.fcai20-3.fna.fbcdn.net/v/t1.15752-9/653758753_1281887263855823_73359001553609956_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_ohc=rfYDHmYN9lwQ7kNvwHWBCkF&_nc_oc=Adq-hYdjZcJf5R2bZBjGcglwCWNIFCSNgn1jl4EhF_m7yPOH79XwfVf3Di9t0CeM8Ns&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fcai20-3.fna&_nc_ss=7a32e&oh=03_Q7cD4wHmrYKRWNy3PPd0vP0Qyb3Y_xwZ_f8X5eKXnBsoLX5GpA&oe=69EF632C"
+                            src="https://scontent.fcai20-3.fna.fbcdn.net/v/t1.15752-9/653758753_1281887263855823_73359001553609956_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_ohc=RpvQEmP5oRsQ7kNvwHxy-r6&_nc_oc=AdoGm2EFnO7deC1GOBuA_qMIQa5h8aKHDHRCtOY-quQXuBaZHEtbNDqlCVWy_uUejxc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fcai20-3.fna&_nc_ss=7a32e&oh=03_Q7cD4wGLI3R_NkXtE2ic6A86WNsC9eWbNus3fc5NFuepvXYalg&oe=69F0ECEC"
                             onerror="this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuB7EGc0gqHPvfpXCsX_PuOyDxU1cKqCCQ0CYJeBUQemUta3oUKl7QZqJAr9wf768tGf9PIzbHDlr8v2YuJwqoRxL91039UqcljJEoI4ixWzg8q4mxzrNtn6l-xuXHuXyOlA4RNeYcGLkZFcmNxaYaxiw9Z6dquHuw_-AiAYOhAd7dj56e2Hpv5vDrRSlBvjOyfKHUxTDpAnkdjFMI_DE6ag-46xpyV3wZJlxEVolvd74gWqQcBbRALIrTxmy1HPS34vjcgnFFqqXTx4'" />
                     </div>
                 </div>
@@ -246,6 +298,20 @@
                         <h3 class="text-2xl font-bold mb-2">مقدمة أكاديمية</h3>
                         <p class="text-sm opacity-70">شاهد نظرة عامة على المنهج الدراسي</p>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lessons Section -->
+        <section class="py-32 px-8 bg-surface-container-low dark:bg-slate-900 transition-colors duration-500 border-y border-transparent dark:border-slate-800" id="lessons">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col items-center text-center space-y-6 mb-16">
+                    <span class="text-tertiary dark:text-tertiary-fixed font-bold tracking-[0.2em] uppercase text-xs">استكشف</span>
+                    <h2 class="text-4xl md:text-5xl font-black text-on-surface dark:text-white tracking-tight">دوراتنا التعليمية</h2>
+                    <div class="w-24 h-1 bg-amber-400 rounded-full"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="landing-courses-list">
+                    <!-- Fetched dynamically -->
                 </div>
             </div>
         </section>
@@ -377,6 +443,11 @@
         <div class="bg-surface dark:bg-slate-900 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300 dark:border dark:border-slate-800 relative">
             <button id="close-students" class="absolute top-4 left-4 text-outline hover:text-on-surface dark:hover:text-white"><span class="material-symbols-outlined">close</span></button>
             <h3 class="text-2xl font-black mb-6 dark:text-white">إدارة الطلاب</h3>
+            <div class="mb-4">
+                <input type="text" id="search-student" placeholder="ابحث بالبريد الإلكتروني..." 
+                       class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full text-right"
+                       oninput="filterStudents(this.value)" dir="ltr">
+            </div>
             <div id="students-list" class="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar text-right">
                 <div class="text-center text-outline py-8">جاري التحميل...</div>
             </div>
@@ -531,6 +602,9 @@
             </div>
         </div>
     </footer>
+
+    <!-- Plyr Library for Custom Video Player -->
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
@@ -791,6 +865,19 @@
             });
         }
 
+        window.filterStudents = (query) => {
+            const lowerQuery = query.toLowerCase();
+            const students = document.querySelectorAll('.student-row');
+            students.forEach(student => {
+                const email = student.getAttribute('data-email');
+                if (email.includes(lowerQuery)) {
+                    student.style.display = 'flex';
+                } else {
+                    student.style.display = 'none';
+                }
+            });
+        };
+
         async function fetchAndRenderStudents() {
             const list = document.getElementById('students-list');
             list.innerHTML = "<div class='text-center text-outline py-8'>جاري التحميل...</div>";
@@ -803,7 +890,7 @@
                     if(d.role === 'student') {
                         const verified = d.isVerified;
                         html += `
-                        <div class="flex items-center justify-between gap-3 p-4 bg-surface-container-lowest dark:bg-slate-950 rounded-xl border border-outline-variant/20 dark:border-slate-800">
+                        <div class="student-row flex items-center justify-between gap-3 p-4 bg-surface-container-lowest dark:bg-slate-950 rounded-xl border border-outline-variant/20 dark:border-slate-800" data-email="${(d.email || '').toLowerCase()}">
                             <div class="text-right flex-1 min-w-0">
                                 <p class="font-bold dark:text-white truncate">${d.email}</p>
                                 <p class="text-xs font-bold mt-1 ${verified ? 'text-green-500' : 'text-amber-500'}">${verified ? 'مفعل' : 'قيد الانتظار'}</p>
@@ -941,6 +1028,7 @@
                     const parsed = JSON.parse(cache);
                     if (parsed && parsed.length >= 0) {
                         currentCourses = parsed;
+                        renderLandingCourses(currentCourses);
                         return renderCourses(filterCoursesForUser(currentCourses));
                     }
                 } catch (e) { }
@@ -954,9 +1042,31 @@
                 localStorage.setItem(cacheKey, JSON.stringify(courses));
                 currentCourses = courses;
                 renderCourses(filterCoursesForUser(courses));
+                renderLandingCourses(courses);
             } catch(e) {
                 console.error(e);
             }
+        }
+
+        function renderLandingCourses(courses) {
+            const container = document.getElementById('landing-courses-list');
+            if (!container) return;
+            if (!courses || courses.length === 0) {
+                container.innerHTML = "<div class='col-span-full py-20 text-center text-on-surface-variant dark:text-slate-400'>لا توجد دورات متاحة حالياً.</div>";
+                return;
+            }
+            container.innerHTML = courses.map((course) => {
+                return "<div class='bg-surface dark:bg-slate-950 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 border border-outline-variant/20 dark:border-slate-800 flex flex-col items-start justify-between text-right'>" +
+                    "<div>" +
+                    "<div class='w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary dark:text-primary-fixed mb-6'>" +
+                    "<span class='material-symbols-outlined'>school</span>" +
+                    "</div>" +
+                    "<h3 class='text-xl font-black text-on-surface dark:text-white mb-3'>" + course.title + "</h3>" +
+                    "<p class='text-on-surface-variant dark:text-slate-400 text-sm leading-relaxed'>" + (course.description || "") + "</p>" +
+                    "</div>" +
+                    "<button onclick='openProfile()' class='mt-6 text-primary dark:text-primary-fixed font-bold text-sm hover:underline flex items-center gap-1'>ابدأ الآن <span class='material-symbols-outlined text-[14px]' style='transform:scaleX(-1)'>arrow_forward</span></button>" +
+                    "</div>";
+            }).join('');
         }
 
         function filterCoursesForUser(courses) {
@@ -1359,9 +1469,30 @@
                 let embedUrl = lesson.content;
                 const ytMatch = lesson.content.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/)|[?&]v=)([^&?]{11})/);
                 if (ytMatch && ytMatch[1]) {
-                    embedUrl = 'https://www.youtube.com/embed/' + ytMatch[1];
+                    stage.innerHTML = `
+                        <div class="w-full h-full absolute inset-0">
+                            <div id="custom-video-player" data-plyr-provider="youtube" data-plyr-embed-id="${ytMatch[1]}"></div>
+                        </div>
+                    `;
+                    
+                    if (window.activePlayer) {
+                        try { window.activePlayer.destroy(); } catch (e) {}
+                    }
+                    window.activePlayer = new Plyr('#custom-video-player', {
+                        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'],
+                        settings: ['speed', 'quality'],
+                        youtube: { noCookie: true, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1, playsinline: 1 },
+                        disableContextMenu: true
+                    });
+
+                    // Block right-click to prevent "Copy video URL"
+                    const plyrEl = document.querySelector('.plyr');
+                    if (plyrEl) {
+                        plyrEl.addEventListener('contextmenu', e => e.preventDefault());
+                    }
+                } else {
+                    stage.innerHTML = `<iframe class="w-full h-full border-0 absolute inset-0" src="${embedUrl}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
                 }
-                stage.innerHTML = `<iframe class="w-full h-full border-0 absolute inset-0" src="${embedUrl}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
             } else if (lesson.type === 'quiz') {
                 stage.classList.remove('aspect-video');
                 stage.classList.add('bg-surface-container-lowest', 'dark:bg-slate-950', 'py-16', 'px-8');
@@ -1587,6 +1718,40 @@
 
         setTimeout(() => fetchAndRenderCourses(), 500);
     </script>
-</body>
-</html>
-    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
