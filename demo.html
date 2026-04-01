@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>منصة التعليم | النسخة التجريبية</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#e2e2e4",
+                        "inverse-on-surface": "#f0f0f2",
+                        "surface-container-high": "#e8e8ea",
+                        "secondary-fixed": "#ebdcff",
+                        "outline-variant": "#cbc3d5",
+                        "on-primary-container": "#ceb8ff",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#734700",
+                        "on-tertiary-container": "#ffb556",
+                        "on-surface": "#1a1c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#6f48b2",
+                        "on-tertiary-fixed-variant": "#663e00",
+                        "on-surface-variant": "#494453",
+                        "on-error": "#ffffff",
+                        "primary-container": "#5e35b1",
+                        "secondary-container": "#b78efe",
+                        "on-background": "#1a1c1d",
+                        "primary-fixed-dim": "#d1bcff",
+                        "primary-fixed": "#eaddff",
+                        "on-secondary-fixed": "#260058",
+                        "surface-container-low": "#f3f3f5",
+                        "surface-variant": "#e2e2e4",
+                        "surface": "#f9f9fb",
+                        "surface-dim": "#d9dadc",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb961",
+                        "on-tertiary-fixed": "#2b1700",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#f9f9fb",
+                        "tertiary": "#543200",
+                        "on-primary-fixed": "#24005b",
+                        "on-primary-fixed-variant": "#5429a7",
+                        "tertiary-fixed": "#ffddb9",
+                        "on-secondary-fixed-variant": "#572e99",
+                        "surface-container": "#eeeef0",
+                        "primary": "#461599",
+                        "error": "#ba1a1a",
+                        "background": "#f9f9fb",
+                        "inverse-surface": "#2f3132",
+                        "inverse-primary": "#d1bcff",
+                        "secondary-fixed-dim": "#d4bbff",
+                        "on-secondary-container": "#491d8a",
+                        "surface-tint": "#6c45c0",
+                        "outline": "#7b7484"
+                    },
+                    fontFamily: {
+                        "headline": ["Cairo", "sans-serif"],
+                        "body": ["Cairo", "sans-serif"],
+                        "label": ["Cairo", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --plyr-color-main: #6c45c0; --plyr-video-control-color-hover: #fff; }
+        .plyr__video-embed::after { content: ''; position: absolute; bottom: 0; right: 0; width: 200px; height: 50px; background: #000; z-index: 2; pointer-events: all; cursor: default; }
+        .plyr__video-embed::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 80px; background: #000; z-index: 2; pointer-events: all; cursor: default; }
+        .plyr__controls { z-index: 20 !important; }
+        .plyr__control--overlaid { z-index: 20 !important; }
+        .plyr__control[data-plyr="share"], .plyr__control[data-plyr="pip"], .plyr__share, .plyr__controls__item.plyr__control[href], a.plyr__control { display: none !important; }
+        .plyr { -webkit-user-select: none; user-select: none; }
+        html { scroll-behavior: smooth; }
+        .glass-effect { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        [dir="rtl"] .material-symbols-outlined { transform: scaleX(-1); }
+        [dir="rtl"] #theme-icon, [dir="rtl"] [id^="close"] .material-symbols-outlined { transform: scaleX(1); }
+        .loading-shimmer { background: linear-gradient(90deg, #f3f3f5 25%, #e2e2e4 50%, #f3f3f5 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        .dark .loading-shimmer { background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @media (max-width: 768px) { .mobile-hidden { display: none !important; } }
+    </style>
+</head>
+
+<body class="bg-surface dark:bg-slate-950 text-on-surface dark:text-slate-100 font-body selection:bg-tertiary-fixed selection:text-on-tertiary-fixed transition-colors duration-300">
+    <nav class="sticky top-0 w-full z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-sm dark:shadow-none transition-all duration-200 border-b border-transparent dark:border-slate-800">
+        <div class="flex justify-between items-center max-w-7xl mx-auto px-8 py-4">
+            <div id="secret-admin-trigger" class="text-2xl font-black tracking-tighter text-violet-900 dark:text-violet-100 cursor-pointer select-none" title="اضغط 3 مرات لدخول المعلم">المنصة التعليمية</div>
+            <div class="hidden md:flex items-center gap-8 font-sans antialiased text-sm font-medium tracking-tight">
+                <a class="text-slate-600 dark:text-slate-400 hover:text-violet-900 dark:hover:text-white transition-colors" href="#about">عن المنصة</a>
+                <a class="text-slate-600 dark:text-slate-400 hover:text-violet-900 dark:hover:text-white transition-colors" href="#lessons">الدورات</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="nav-profile-btn" class="hidden px-5 py-2 rounded-full bg-primary/10 dark:bg-primary-fixed/10 text-primary dark:text-primary-fixed text-sm font-bold hover:bg-primary/20 dark:hover:bg-primary-fixed/20 transition-colors items-center gap-2" onclick="openProfile()">
+                    <span class="material-symbols-outlined text-[18px]" style="transform:scaleX(1)">school</span> الكورسات
+                </button>
+                <button id="theme-toggle-btn" class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors text-violet-900 dark:text-violet-400">
+                    <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+                </button>
+                <button id="auth-btn" class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors text-violet-900 dark:text-violet-400 group relative">
+                    <span class="material-symbols-outlined transition-transform group-active:scale-95">account_circle</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="landing-view" class="transition-opacity duration-500">
+        <section class="relative min-h-[870px] flex items-center overflow-hidden px-8 py-20 dark:bg-slate-950">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full">
+                <div class="z-10">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-xs font-bold tracking-widest uppercase mb-6 shadow-sm">نسخة تجريبية</span>
+                    <h1 class="text-6xl md:text-8xl font-black text-primary dark:text-primary-fixed tracking-tighter leading-[0.9] mb-8">تعلم باحتراف</h1>
+                    <p class="text-xl text-on-surface-variant dark:text-slate-300 max-w-lg leading-relaxed mb-10">ريادة الجيل القادم من التميز الأكاديمي من خلال بيئات تفاعلية رقمية وأبحاث متخصصة.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a class="bg-primary hover:bg-primary-container text-on-primary px-8 py-4 rounded-full font-bold text-sm tracking-wide hover:scale-105 active:scale-100 transition-all shadow-lg shadow-primary/30" href="#lessons">عرض الدروس</a>
+                        <button id="profile-btn" class="px-8 py-4 rounded-full border-2 border-primary/30 dark:border-slate-600 font-bold text-sm text-primary dark:text-primary-fixed hover:bg-primary/10 dark:hover:bg-slate-800 transition-colors">الكورسات</button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute -top-20 -right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-tertiary-fixed-dim/20 rounded-full blur-3xl"></div>
+                    <div class="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-2xl transform lg:-rotate-2">
+                        <img alt="test" class="w-full h-full object-cover" src="https://i.ytimg.com/vi/fsiu2KgGLyo/hqdefault.jpg" onerror="this.src='https://via.placeholder.com/800x1000'" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-32 bg-surface-container-low dark:bg-slate-900 transition-colors duration-500 border-y border-transparent dark:border-slate-800" id="about">
+            <div class="max-w-4xl mx-auto px-8">
+                <div class="flex flex-col items-center text-center space-y-12">
+                    <span class="text-tertiary dark:text-tertiary-fixed font-bold tracking-[0.2em] uppercase text-xs">الفلسفة الأكاديمية</span>
+                    <h2 class="text-4xl md:text-5xl font-black text-on-surface dark:text-white tracking-tight">رعاية المعرفة للعصر الحديث</h2>
+                    <div class="w-24 h-1 bg-amber-400 rounded-full"></div>
+                    <p class="text-xl md:text-2xl text-on-surface-variant dark:text-slate-300 font-light leading-relaxed">منصة متكاملة للمدرسين لرفع الفيديوهات، الكويزات، وإدارة الطلاب بسهولة واحترافية.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-32 px-8 bg-surface-container-low dark:bg-slate-900 transition-colors duration-500 border-y border-transparent dark:border-slate-800" id="lessons">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col items-center text-center space-y-6 mb-16">
+                    <span class="text-tertiary dark:text-tertiary-fixed font-bold tracking-[0.2em] uppercase text-xs">استكشف</span>
+                    <h2 class="text-4xl md:text-5xl font-black text-on-surface dark:text-white tracking-tight">دوراتنا التعليمية</h2>
+                    <div class="w-24 h-1 bg-amber-400 rounded-full"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="landing-courses-list">
+                    </div>
+            </div>
+        </section>
+    </div> <div id="profile-view" class="hidden min-h-screen transition-opacity duration-500 bg-surface dark:bg-slate-950 pt-8 pb-32">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="flex justify-between items-end mb-16">
+                <div>
+                    <button onclick="closeProfile()" class="mb-4 flex items-center gap-2 text-outline hover:text-primary dark:hover:text-primary-fixed transition-colors font-bold"><span class="material-symbols-outlined">arrow_forward</span> العودة للرئيسية</button>
+                    <h2 class="text-4xl font-black text-primary dark:text-primary-fixed tracking-tight mb-4">الملف الأكاديمي</h2>
+                    <p class="text-on-surface-variant dark:text-slate-400 max-w-md">إدارة وتصفح الدورات التدريبية الخاصة بك.</p>
+                </div>
+            </div>
+
+            <div id="pending-banner" class="hidden mb-12 p-8 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-3xl flex flex-col items-center justify-center text-center">
+                <span class="material-symbols-outlined text-amber-500 text-6xl mb-4">hourglass_empty</span>
+                <h3 class="text-2xl font-bold text-amber-900 dark:text-amber-100 mb-2">حسابك قيد المراجعة</h3>
+                <p class="text-amber-700 dark:text-amber-200">تم تلقي طلب تسجيلك بنجاح. في انتظار تفعيل الحساب من قبل المعلم لتتمكن من الوصول إلى الدورات.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="courses-container">
+                <div class="h-80 rounded-3xl loading-shimmer opacity-30 dark:opacity-50"></div>
+            </div>
+        </div>
+    </div> <div id="player-view" class="hidden fixed inset-0 z-[100] bg-surface-container-lowest dark:bg-slate-950 flex flex-col">
+        <div class="h-16 border-b border-outline-variant/20 dark:border-slate-800 flex items-center justify-between px-6 bg-surface dark:bg-slate-900 shrink-0">
+            <div class="flex items-center gap-4">
+                <button onclick="closeCourseView()" class="flex items-center gap-2 text-on-surface-variant dark:text-slate-300 hover:text-primary dark:hover:text-primary-fixed transition-colors font-bold group">
+                    <span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_forward</span>
+                    <span class="text-sm hidden sm:inline">عودة</span>
+                </button>
+                <div class="w-px h-6 bg-outline-variant/30 dark:bg-slate-700"></div>
+                <h2 id="active-course-title" class="text-lg font-bold text-on-surface dark:text-white truncate max-w-xs md:max-w-md">...</h2>
+            </div>
+            <div class="flex items-center gap-4 text-sm font-bold text-on-surface-variant dark:text-slate-400">
+                <button id="toggle-sidebar-btn" class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors md:hidden text-primary dark:text-primary-fixed flex items-center justify-center" onclick="toggleSidebar()">
+                    <span class="material-symbols-outlined">menu_open</span>
+                </button>
+                <span class="material-symbols-outlined hidden sm:inline">school</span>
+                <button id="player-theme-btn" class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors text-violet-900 dark:text-violet-400">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden">
+            <div class="w-full h-2/5 md:h-auto md:w-80 lg:w-96 flex-shrink-0 border-t md:border-t-0 border-l border-outline-variant/20 dark:border-slate-800 bg-surface dark:bg-slate-900 flex flex-col transition-transform duration-300" id="player-sidebar">
+                <div class="p-4 border-b border-outline-variant/20 dark:border-slate-800 flex justify-between items-center">
+                    <h3 class="font-bold text-on-surface dark:text-white">محتوى الدورة</h3>
+                    <button class="md:hidden p-2 -mr-2 rounded-full hover:bg-surface-container-high dark:hover:bg-slate-800 text-outline transition-colors flex items-center justify-center" onclick="toggleSidebar()">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                </div>
+                <div id="lessons-sidebar-list" class="flex-1 overflow-y-auto custom-scrollbar"></div>
+                
+                <div id="teacher-player-add" class="hidden p-4 border-t border-outline-variant/20 dark:border-slate-800 bg-surface dark:bg-slate-900">
+                    <button class="w-full py-3 bg-primary/10 text-primary dark:text-primary-fixed hover:bg-primary/20 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors">
+                        <span class="material-symbols-outlined">add</span> إضافة جزء جديد
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 flex flex-col overflow-y-auto custom-scrollbar bg-surface-container-lowest dark:bg-slate-950">
+                <div id="player-main-stage" class="w-full bg-black aspect-video relative flex items-center justify-center">
+                    <span class="text-white/50 flex flex-col items-center gap-4">
+                        <span class="material-symbols-outlined text-6xl">play_circle</span> اختر درساً للبدء
+                    </span>
+                </div>
+                <div class="max-w-4xl mx-auto w-full p-8 md:p-12 mb-20">
+                    <h1 id="active-lesson-title" class="text-3xl md:text-4xl font-black text-on-surface dark:text-white mb-6">مرحباً بك في الدورة</h1>
+                    <div id="active-lesson-desc" class="prose dark:prose-invert max-w-none text-on-surface-variant dark:text-slate-300 whitespace-pre-line text-lg leading-relaxed">
+                        اختر درساً من القائمة الجانبية للبدء في التعلم.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-8 left-8 z-[120] flex flex-col gap-4">
+        <button id="manage-students-btn" class="hidden bg-secondary text-white p-4 rounded-full shadow-2xl hover:bg-secondary-container transition-all hover:scale-110 active:scale-95 group relative flex items-center justify-center">
+            <span class="material-symbols-outlined text-3xl">groups</span>
+            <span class="absolute left-full ml-4 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity">الطلاب</span>
+        </button>
+        <button id="admin-add-btn" class="hidden bg-primary text-white p-4 rounded-full shadow-2xl hover:bg-primary-container transition-all hover:scale-110 active:scale-95 group relative flex items-center justify-center">
+            <span class="material-symbols-outlined text-3xl">add</span>
+            <span class="absolute left-full ml-4 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-3 rounded-lg opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity">إضافة محتوى</span>
+        </button>
+    </div>
+
+    <div id="add-course-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-surface dark:bg-slate-900 rounded-3xl p-8 w-full max-w-md shadow-2xl transform scale-95 transition-transform duration-300 dark:border dark:border-slate-800 relative">
+            <button id="close-add-course" class="absolute top-4 left-4 text-outline hover:text-on-surface dark:hover:text-white"><span class="material-symbols-outlined">close</span></button>
+            <h3 class="text-2xl font-black mb-6 dark:text-white">إضافة دورة جديدة</h3>
+            <form id="add-course-form" class="flex flex-col gap-4">
+                <input type="text" id="course-title" placeholder="اسم الدورة" required class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full text-right">
+                <textarea id="course-desc" placeholder="وصف الدورة" rows="3" required class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full resize-none text-right"></textarea>
+                <button type="submit" id="submit-course-btn" class="bg-primary hover:bg-primary/90 text-white py-3 rounded-xl font-bold mt-2 transition-colors active:scale-95">إنشاء الدورة</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="students-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-surface dark:bg-slate-900 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300 dark:border dark:border-slate-800 relative">
+            <button id="close-students" class="absolute top-4 left-4 text-outline hover:text-on-surface dark:hover:text-white"><span class="material-symbols-outlined">close</span></button>
+            <h3 class="text-2xl font-black mb-6 dark:text-white">إدارة الطلاب</h3>
+            <div class="mb-4">
+                <input type="text" id="search-student" placeholder="ابحث بالبريد الإلكتروني..." class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full text-right" oninput="filterStudents(this.value)" dir="ltr">
+            </div>
+            <div id="students-list" class="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar text-right"></div>
+        </div>
+    </div>
+
+    <div id="assign-modal" class="hidden fixed inset-0 z-[160] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-surface dark:bg-slate-900 rounded-3xl p-8 w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300 dark:border dark:border-slate-800 relative">
+            <button id="close-assign" class="absolute top-4 left-4 text-outline hover:text-on-surface dark:hover:text-white" onclick="toggleModal(document.getElementById('assign-modal'), false)"><span class="material-symbols-outlined">close</span></button>
+            <h3 class="text-2xl font-black mb-2 dark:text-white">تعيين الكورسات</h3>
+            <p id="assign-student-name" class="text-sm text-on-surface-variant dark:text-slate-400 mb-6 font-bold"></p>
+            <div id="assign-courses-list" class="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar"></div>
+        </div>
+    </div>
+
+    <div id="login-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-surface dark:bg-slate-900 rounded-3xl p-8 max-w-sm w-full shadow-2xl transform scale-95 transition-transform duration-300 dark:border dark:border-slate-800 relative">
+            <button id="close-login" class="absolute top-4 left-4 text-outline hover:text-on-surface dark:hover:text-white"><span class="material-symbols-outlined">close</span></button>
+            <h3 class="text-2xl font-black mb-6 dark:text-white">دخول المعلم / الإدارة</h3>
+            <form id="login-form" class="flex flex-col gap-4">
+                <input type="email" id="login-email" placeholder="البريد الإلكتروني" required value="teacher@demo.com" class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full text-right" dir="ltr">
+                <input type="password" id="login-password" placeholder="كلمة المرور" required value="123456" class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full text-right" dir="ltr">
+                <button type="submit" class="bg-primary text-white py-3 rounded-xl font-bold mt-2 hover:bg-primary/90 transition-colors active:scale-95">دخول كمعلم</button>
+                <p id="login-error" class="text-error text-xs text-center hidden"></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="student-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-surface dark:bg-slate-900 rounded-3xl p-8 max-w-sm w-full shadow-2xl transform scale-95 transition-transform duration-300 dark:border dark:border-slate-800 relative">
+            <button id="close-student" class="absolute top-4 left-4 text-outline hover:text-on-surface dark:hover:text-white"><span class="material-symbols-outlined">close</span></button>
+            <h3 class="text-2xl font-black mb-6 dark:text-white" id="student-auth-title">دخول الطالب</h3>
+            <div class="flex gap-2 mb-6 p-1 bg-surface-container-highest dark:bg-slate-950 rounded-lg">
+                <button id="tab-student-login" class="flex-1 py-1.5 text-sm font-bold bg-white dark:bg-slate-800 shadow-sm rounded-md text-primary dark:text-primary-fixed">تسجيل دخول</button>
+                <button id="tab-student-register" class="flex-1 py-1.5 text-sm font-bold text-outline hover:text-on-surface dark:hover:text-white rounded-md">حساب جديد</button>
+            </div>
+            <form id="student-auth-form" class="flex flex-col gap-4">
+                <input type="email" id="student-email" placeholder="البريد الإلكتروني" required value="student@demo.com" class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full text-right" dir="ltr">
+                <input type="password" id="student-password" placeholder="كلمة المرور (6 أحرف)" required value="123456" class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full text-right" dir="ltr">
+                <button type="submit" id="student-submit-btn" class="bg-primary text-white py-3 rounded-xl font-bold mt-2 hover:bg-primary/90 transition-colors active:scale-95">دخول</button>
+                <p id="student-error" class="text-error text-xs text-center hidden"></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-surface dark:bg-slate-900 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl transform scale-95 transition-transform duration-300 dark:border dark:border-slate-800 relative">
+            <button id="close-add" class="absolute top-4 left-4 text-outline hover:text-on-surface dark:hover:text-white"><span class="material-symbols-outlined">close</span></button>
+            <h3 class="text-2xl font-black mb-6 dark:text-white" id="modal-content-title">إضافة محتوى تعليمي</h3>
+
+            <div class="flex gap-4 mb-6">
+                <button class="type-btn active px-4 py-2 rounded-full text-sm font-bold bg-primary text-white shadow-sm" data-type="video">فيديو</button>
+                <button class="type-btn px-4 py-2 rounded-full text-sm font-bold bg-surface-container-highest dark:bg-slate-800 text-on-surface dark:text-slate-300 transition-colors" data-type="lecture">محاضرة</button>
+                <button class="type-btn px-4 py-2 rounded-full text-sm font-bold bg-surface-container-highest dark:bg-slate-800 text-on-surface dark:text-slate-300 transition-colors" data-type="quiz">اختبار</button>
+            </div>
+
+            <form id="add-form" class="flex flex-col gap-4">
+                <input type="text" id="add-title" placeholder="عنوان الدرس" required class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full">
+                <textarea id="add-desc" placeholder="وصف موجز للدرس..." rows="2" required class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full resize-none"></textarea>
+                <input type="text" id="add-duration" placeholder="المدة (مثال: 45 دقيقة)" required class="bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full">
+
+                <div id="dynamic-inputs" class="min-h-[100px] border-t border-outline-variant/20 dark:border-slate-800 pt-4 mt-2">
+                    <input type="url" id="add-content-val" placeholder="رابط يوتيوب" required class="text-left bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary dark:text-white w-full" dir="ltr">
+                </div>
+
+                <button type="submit" id="submit-content-btn" class="bg-primary hover:bg-primary/90 text-white py-3 rounded-xl font-bold mt-4 transition-colors flex justify-center items-center gap-2 active:scale-95">
+                    <span class="material-symbols-outlined">publish</span> نشر المحتوى
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="w-full border-t border-slate-200/20 dark:border-slate-800/50 bg-slate-50 dark:bg-slate-900 mt-20">
+        <div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-8 py-12 gap-6">
+            <div class="text-lg font-bold text-slate-900 dark:text-white">المنصة التعليمية</div>
+            <div class="text-slate-500 text-xs font-semibold tracking-widest uppercase">© <span id="year"></span> جميع الحقوق محفوظة.</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
+    <script>
+        const DEMO_TEACHER = { email: 'teacher@demo.com', pass: '123456', uid: 'teacher_1', role: 'teacher', isVerified: true };
+        const DEMO_STUDENT = { email: 'student@demo.com', pass: '123456', uid: 'student_1', role: 'student', isVerified: true };
+
+        let currentCourses = [];
+        let currentLessons = [];
+        let activeCourseId = null;
+        let isTeacher = false;
+        let isStudent = false;
+        let isVerified = false;
+        let currentUserEmail = '';
+        let currentUserUid = '';
+        let activeAddType = 'video';
+        let studentAuthMode = 'login';
+        let editingLessonId = null;
+
+        // Initialize Local DB
+        function initDB() {
+            if (!localStorage.getItem('demo_users')) localStorage.setItem('demo_users', JSON.stringify([DEMO_TEACHER, DEMO_STUDENT]));
+            if (!localStorage.getItem('demo_courses')) localStorage.setItem('demo_courses', JSON.stringify([
+                { id: 'c1', title: 'مقدمة في الكيمياء العضوية', description: 'دورة تجريبية لمعرفة شكل المنصة.', assignedStudents: ['student_1'] }
+            ]));
+            if (!localStorage.getItem('demo_lessons')) localStorage.setItem('demo_lessons', JSON.stringify([
+                { id: 'l1', courseId: 'c1', title: 'الدرس الأول: روابط الكربون', description: 'شرح مبسط', duration: '15 دقيقة', type: 'video', content: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', icon: 'play_circle' }
+            ]));
+            if (!localStorage.getItem('demo_quiz_results')) localStorage.setItem('demo_quiz_results', JSON.stringify({}));
+        }
+        initDB();
+
+        // Modal Helpers
+        const toggleModal = (modal, show) => {
+            if (show) {
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.remove('opacity-0'); modal.children[0].classList.remove('scale-95'); }, 10);
+            } else {
+                modal.classList.add('opacity-0'); modal.children[0].classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        };
+
+        // DOM Elements
+        const authBtn = document.getElementById('auth-btn');
+        const loginModal = document.getElementById('login-modal');
+        const studentModal = document.getElementById('student-modal');
+        const addCourseModal = document.getElementById('add-course-modal');
+        const addModal = document.getElementById('add-modal');
+        const studentsModal = document.getElementById('students-modal');
+        const assignModal = document.getElementById('assign-modal');
+        const adminBtn = document.getElementById('admin-add-btn');
+        const manageStudentsBtn = document.getElementById('manage-students-btn');
+
+        // Auth Logic
+        function checkAuthState() {
+            const loggedInUser = JSON.parse(localStorage.getItem('demo_logged_in'));
+            if (loggedInUser) {
+                isTeacher = loggedInUser.role === 'teacher';
+                isStudent = loggedInUser.role === 'student';
+                currentUserEmail = loggedInUser.email;
+                currentUserUid = loggedInUser.uid;
+                isVerified = loggedInUser.isVerified;
+
+                authBtn.innerHTML = "<span class='material-symbols-outlined text-primary dark:text-primary-fixed'>logout</span>";
+                document.getElementById('nav-profile-btn').classList.remove('hidden');
+                document.getElementById('nav-profile-btn').classList.add('flex');
+
+                if (isTeacher) {
+                    adminBtn.classList.remove('hidden');
+                    manageStudentsBtn.classList.remove('hidden');
+                    fetchAndRenderCourses();
+                } else {
+                    adminBtn.classList.add('hidden');
+                    manageStudentsBtn.classList.add('hidden');
+                    if (!isVerified) {
+                        document.getElementById('courses-container').classList.add('hidden');
+                        document.getElementById('pending-banner').classList.remove('hidden');
+                    } else {
+                        document.getElementById('courses-container').classList.remove('hidden');
+                        document.getElementById('pending-banner').classList.add('hidden');
+                        fetchAndRenderCourses();
+                    }
+                }
+            } else {
+                isTeacher = isStudent = isVerified = false;
+                authBtn.innerHTML = "<span class='material-symbols-outlined group-active:scale-95'>account_circle</span>";
+                adminBtn.classList.add('hidden');
+                manageStudentsBtn.classList.add('hidden');
+                document.getElementById('nav-profile-btn').classList.add('hidden');
+                fetchAndRenderCourses();
+            }
+        }
+
+        authBtn.addEventListener('click', () => {
+            if (isTeacher || isStudent) { localStorage.removeItem('demo_logged_in'); checkAuthState(); }
+            else toggleModal(studentModal, true);
+        });
+
+        // Secret Admin trigger
+        let adminClickCount = 0;
+        document.getElementById('secret-admin-trigger').addEventListener('click', () => {
+            adminClickCount++;
+            if (adminClickCount >= 3) { toggleModal(loginModal, true); adminClickCount = 0; }
+            setTimeout(() => adminClickCount = 0, 1000);
+        });
+
+        // Login Forms
+        document.getElementById('close-login').addEventListener('click', () => toggleModal(loginModal, false));
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            const users = JSON.parse(localStorage.getItem('demo_users'));
+            const user = users.find(u => u.email === email && u.pass === pass && u.role === 'teacher');
+            if (user) {
+                localStorage.setItem('demo_logged_in', JSON.stringify(user));
+                toggleModal(loginModal, false);
+                document.getElementById('login-error').classList.add('hidden');
+                checkAuthState();
+            } else {
+                document.getElementById('login-error').textContent = 'بيانات المعلم غير صحيحة';
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        });
+
+        // Student Auth (Tabs & Logic)
+        document.getElementById('close-student').addEventListener('click', () => toggleModal(studentModal, false));
+        const tabLogin = document.getElementById('tab-student-login');
+        const tabReg = document.getElementById('tab-student-register');
+        tabLogin.addEventListener('click', () => { studentAuthMode = 'login'; tabLogin.className = "flex-1 py-1.5 text-sm font-bold bg-white dark:bg-slate-800 shadow-sm rounded-md text-primary dark:text-primary-fixed"; tabReg.className = "flex-1 py-1.5 text-sm font-bold text-outline hover:text-on-surface rounded-md"; document.getElementById('student-submit-btn').innerText = "دخول"; });
+        tabReg.addEventListener('click', () => { studentAuthMode = 'register'; tabReg.className = "flex-1 py-1.5 text-sm font-bold bg-white dark:bg-slate-800 shadow-sm rounded-md text-primary dark:text-primary-fixed"; tabLogin.className = "flex-1 py-1.5 text-sm font-bold text-outline hover:text-on-surface rounded-md"; document.getElementById('student-submit-btn').innerText = "تسجيل جديد"; });
+
+        document.getElementById('student-auth-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('student-email').value;
+            const pass = document.getElementById('student-password').value;
+            let users = JSON.parse(localStorage.getItem('demo_users'));
+
+            if (studentAuthMode === 'login') {
+                const user = users.find(u => u.email === email && u.pass === pass && u.role === 'student');
+                if (user) {
+                    localStorage.setItem('demo_logged_in', JSON.stringify(user));
+                    toggleModal(studentModal, false);
+                    document.getElementById('student-error').classList.add('hidden');
+                    checkAuthState();
+                } else {
+                    document.getElementById('student-error').textContent = 'بيانات الطالب غير صحيحة';
+                    document.getElementById('student-error').classList.remove('hidden');
+                }
+            } else {
+                if (users.find(u => u.email === email)) {
+                    document.getElementById('student-error').textContent = 'البريد مسجل مسبقاً';
+                    document.getElementById('student-error').classList.remove('hidden');
+                    return;
+                }
+                const newUser = { email, pass, uid: 'stu_' + Date.now(), role: 'student', isVerified: false };
+                users.push(newUser);
+                localStorage.setItem('demo_users', JSON.stringify(users));
+                localStorage.setItem('demo_logged_in', JSON.stringify(newUser));
+                toggleModal(studentModal, false);
+                document.getElementById('student-error').classList.add('hidden');
+                checkAuthState();
+            }
+        });
+
+        // Navigation
+        window.openProfile = () => {
+            if (!isStudent && !isTeacher) return toggleModal(studentModal, true);
+            document.getElementById('landing-view').classList.add('hidden');
+            document.getElementById('player-view').classList.add('hidden');
+            document.getElementById('profile-view').classList.remove('hidden');
+        };
+        window.closeProfile = () => {
+            document.getElementById('profile-view').classList.add('hidden');
+            document.getElementById('player-view').classList.add('hidden');
+            document.getElementById('landing-view').classList.remove('hidden');
+        };
+        document.getElementById('profile-btn').addEventListener('click', openProfile);
+
+        adminBtn.addEventListener('click', () => {
+            if (activeCourseId) toggleModal(addModal, true);
+            else toggleModal(addCourseModal, true);
+        });
+
+        // Courses Management
+        document.getElementById('close-add-course').addEventListener('click', () => toggleModal(addCourseModal, false));
+        document.getElementById('add-course-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!isTeacher) return;
+            const courses = JSON.parse(localStorage.getItem('demo_courses'));
+            courses.push({
+                id: 'c_' + Date.now(),
+                title: document.getElementById('course-title').value,
+                description: document.getElementById('course-desc').value,
+                assignedStudents: ['student_1']
+            });
+            localStorage.setItem('demo_courses', JSON.stringify(courses));
+            toggleModal(addCourseModal, false);
+            document.getElementById('add-course-form').reset();
+            fetchAndRenderCourses();
+        });
+
+        function fetchAndRenderCourses() {
+            const courses = JSON.parse(localStorage.getItem('demo_courses'));
+            currentCourses = courses;
+            let displayCourses = courses;
+            if (isStudent) displayCourses = courses.filter(c => (c.assignedStudents || []).includes(currentUserUid));
+            else if (!isTeacher && !isStudent) displayCourses = [];
+
+            const container = document.getElementById('courses-container');
+            const landingContainer = document.getElementById('landing-courses-list');
+
+            let landingHtml = courses.map(course => `<div class='bg-surface dark:bg-slate-950 rounded-3xl p-8 hover:shadow-xl border border-outline-variant/20 flex flex-col items-start justify-between text-right'><div><div class='w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6'><span class='material-symbols-outlined'>school</span></div><h3 class='text-xl font-black text-on-surface dark:text-white mb-3'>${course.title}</h3><p class='text-on-surface-variant dark:text-slate-400 text-sm'>${course.description}</p></div><button onclick='openProfile()' class='mt-6 text-primary font-bold text-sm flex items-center gap-1'>ابدأ الآن</button></div>`).join('');
+            if(landingContainer) landingContainer.innerHTML = landingHtml || "<div class='col-span-full py-10 text-center'>لا توجد دورات متاحة حالياً.</div>";
+
+            if (!displayCourses.length) {
+                container.innerHTML = "<div class='col-span-full py-20 text-center text-outline-variant dark:text-slate-600'>لا يوجد كورسات حالياً.</div>";
+            } else {
+                container.innerHTML = displayCourses.map(course => {
+                    let adminControls = isTeacher ? `<button onclick='event.stopPropagation(); deleteCourse("${course.id}")' class='text-error p-2 bg-surface dark:bg-slate-800 rounded-full hover:scale-110'><span class='material-symbols-outlined text-sm'>delete</span></button>` : "";
+                    return `<div onclick='openCourse("${course.id}")' class='group bg-surface-container-lowest dark:bg-slate-900 rounded-3xl p-8 hover:shadow-xl cursor-pointer text-right border border-outline-variant/20'>
+                        <div class='flex justify-between items-start mb-6'>
+                            <div class='w-12 h-12 rounded-xl bg-orange-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-700 dark:text-amber-500'><span class='material-symbols-outlined'>folder_open</span></div>
