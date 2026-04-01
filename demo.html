@@ -100,7 +100,7 @@
 <body class="bg-surface dark:bg-slate-950 text-on-surface dark:text-slate-100 font-body selection:bg-tertiary-fixed selection:text-on-tertiary-fixed transition-colors duration-300">
     <nav class="sticky top-0 w-full z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-sm dark:shadow-none transition-all duration-200 border-b border-transparent dark:border-slate-800">
         <div class="flex justify-between items-center max-w-7xl mx-auto px-8 py-4">
-            <div id="secret-admin-trigger" class="text-2xl font-black tracking-tighter text-violet-900 dark:text-violet-100 cursor-pointer select-none" title="اضغط 3 مرات لدخول المعلم">المنصة التعليمية</div>
+            <div id="secret-admin-trigger" class="text-2xl font-black tracking-tighter text-violet-900 dark:text-violet-100 cursor-pointer select-none" title="اضغط هنا لدخول المعلم">المنصة التعليمية</div>
             <div class="hidden md:flex items-center gap-8 font-sans antialiased text-sm font-medium tracking-tight">
                 <a class="text-slate-600 dark:text-slate-400 hover:text-violet-900 dark:hover:text-white transition-colors" href="#about">عن المنصة</a>
                 <a class="text-slate-600 dark:text-slate-400 hover:text-violet-900 dark:hover:text-white transition-colors" href="#lessons">الدورات</a>
@@ -124,7 +124,7 @@
             <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full">
                 <div class="z-10">
                     <span class="inline-block px-4 py-1.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-xs font-bold tracking-widest uppercase mb-6 shadow-sm">نسخة تجريبية</span>
-                    <h1 class="text-6xl md:text-8xl font-black text-primary dark:text-primary-fixed tracking-tighter leading-[0.9] mb-8">تعلم باحتراف</h1>
+                    <h1 class="text-6xl md:text-8xl font-black text-primary dark:text-primary-fixed tracking-tighter leading-[0.9] mb-8"> الدكتور في الفيزياء</h1>
                     <p class="text-xl text-on-surface-variant dark:text-slate-300 max-w-lg leading-relaxed mb-10">ريادة الجيل القادم من التميز الأكاديمي من خلال بيئات تفاعلية رقمية وأبحاث متخصصة.</p>
                     <div class="flex flex-wrap gap-4">
                         <a class="bg-primary hover:bg-primary-container text-on-primary px-8 py-4 rounded-full font-bold text-sm tracking-wide hover:scale-105 active:scale-100 transition-all shadow-lg shadow-primary/30" href="#lessons">عرض الدروس</a>
@@ -135,7 +135,7 @@
                     <div class="absolute -top-20 -right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
                     <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-tertiary-fixed-dim/20 rounded-full blur-3xl"></div>
                     <div class="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-2xl transform lg:-rotate-2">
-                        <img alt="test" class="w-full h-full object-cover" src="https://i.ytimg.com/vi/fsiu2KgGLyo/hqdefault.jpg" onerror="this.src='https://via.placeholder.com/800x1000'" />
+                        <img alt="test" class="w-full h-full object-cover" srchttps://yt3.googleusercontent.com/qDs6fv6_GrV7nfAIGF4avazwLjYp8eCMME4RyYMXRL-Ctav3_nZYraz1JsV0wd18mbD4IoKxmg=s900-c-k-c0x00ffffff-no-rj" onerror="this.src='https://via.placeholder.com/800x1000'" />
                     </div>
                 </div>
             </div>
@@ -442,12 +442,9 @@
             else toggleModal(studentModal, true);
         });
 
-        // Secret Admin trigger
-        let adminClickCount = 0;
+        // فتح دخول المعلم بضغطة واحدة لتسهيل العرض التجريبي
         document.getElementById('secret-admin-trigger').addEventListener('click', () => {
-            adminClickCount++;
-            if (adminClickCount >= 3) { toggleModal(loginModal, true); adminClickCount = 0; }
-            setTimeout(() => adminClickCount = 0, 1000);
+            toggleModal(loginModal, true);
         });
 
         // Login Forms
@@ -567,3 +564,247 @@
                     return `<div onclick='openCourse("${course.id}")' class='group bg-surface-container-lowest dark:bg-slate-900 rounded-3xl p-8 hover:shadow-xl cursor-pointer text-right border border-outline-variant/20'>
                         <div class='flex justify-between items-start mb-6'>
                             <div class='w-12 h-12 rounded-xl bg-orange-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-700 dark:text-amber-500'><span class='material-symbols-outlined'>folder_open</span></div>
+                            ${adminControls}
+                        </div>
+                        <h3 class='text-2xl font-black text-on-surface dark:text-white mb-3'>${course.title}</h3>
+                        <p class='text-on-surface-variant dark:text-slate-400 text-sm'>${course.description}</p>
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        window.deleteCourse = (id) => {
+            if (!confirm('هل أنت متأكد من حذف هذه الدورة؟')) return;
+            let courses = JSON.parse(localStorage.getItem('demo_courses'));
+            localStorage.setItem('demo_courses', JSON.stringify(courses.filter(c => c.id !== id)));
+            let lessons = JSON.parse(localStorage.getItem('demo_lessons'));
+            localStorage.setItem('demo_lessons', JSON.stringify(lessons.filter(l => l.courseId !== id)));
+            fetchAndRenderCourses();
+        };
+
+        window.openCourse = (id) => {
+            activeCourseId = id;
+            const course = currentCourses.find(c => c.id === id);
+            document.getElementById('profile-view').classList.add('hidden');
+            document.getElementById('landing-view').classList.add('hidden');
+            document.getElementById('player-view').classList.remove('hidden');
+            document.getElementById('active-course-title').innerText = course.title;
+            
+            const addBtn = document.getElementById('teacher-player-add');
+            if (isTeacher) addBtn.classList.remove('hidden'); else addBtn.classList.add('hidden');
+
+            document.getElementById('player-main-stage').innerHTML = `<span class="text-white/50 flex flex-col items-center gap-4"><span class="material-symbols-outlined text-6xl">play_circle</span>اختر درساً للبدء</span>`;
+            document.getElementById('active-lesson-title').innerText = course.title;
+            document.getElementById('active-lesson-desc').innerText = course.description;
+            fetchAndRenderLessons(id);
+        };
+        window.closeCourseView = () => { activeCourseId = null; openProfile(); };
+        window.toggleSidebar = () => { document.getElementById('player-sidebar').classList.toggle('mobile-hidden'); };
+
+        // Lessons Management
+        const typeBtns = document.querySelectorAll('.type-btn');
+        const dynamicInputs = document.getElementById('dynamic-inputs');
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                typeBtns.forEach(b => { b.classList.remove('bg-primary', 'text-white'); b.classList.add('bg-surface-container-highest', 'text-on-surface'); });
+                btn.classList.add('bg-primary', 'text-white'); btn.classList.remove('bg-surface-container-highest', 'text-on-surface');
+                activeAddType = btn.dataset.type;
+                if (activeAddType === 'video') dynamicInputs.innerHTML = "<input type='url' id='add-content-val' placeholder='رابط يوتيوب' required class='bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 py-3 w-full text-left' dir='ltr'>";
+                else if (activeAddType === 'lecture') dynamicInputs.innerHTML = "<textarea id='add-content-val' placeholder='محتوى المحاضرة مقالي...' rows='6' required class='bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-4 py-3 w-full'></textarea>";
+                else if (activeAddType === 'quiz') dynamicInputs.innerHTML = "<div class='bg-surface p-4 rounded-xl border border-outline-variant/30 text-center text-sm font-bold text-outline'>في النسخة التجريبية، استخدم ميزة الفيديوهات والمحاضرات (الكويز مفعل برمجياً في النسخة الكاملة).</div><input type='hidden' id='add-content-val' value='[{\"q\":\"سؤال تجريبي؟\",\"opts\":[\"أ\",\"ب\",\"ج\"],\"ans\":0}]'>";
+            });
+        });
+
+        document.getElementById('close-add').addEventListener('click', () => toggleModal(addModal, false));
+        document.getElementById('add-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!isTeacher || !activeCourseId) return;
+            const lessons = JSON.parse(localStorage.getItem('demo_lessons'));
+            
+            const newLesson = {
+                id: editingLessonId || 'l_' + Date.now(),
+                courseId: activeCourseId,
+                title: document.getElementById('add-title').value,
+                description: document.getElementById('add-desc').value,
+                duration: document.getElementById('add-duration').value,
+                type: activeAddType,
+                content: document.getElementById('add-content-val').value,
+                icon: activeAddType === 'video' ? 'play_circle' : activeAddType === 'quiz' ? 'quiz' : 'menu_book'
+            };
+
+            if (editingLessonId) {
+                const index = lessons.findIndex(l => l.id === editingLessonId);
+                lessons[index] = newLesson;
+            } else {
+                lessons.push(newLesson);
+            }
+
+            localStorage.setItem('demo_lessons', JSON.stringify(lessons));
+            toggleModal(addModal, false);
+            editingLessonId = null;
+            document.getElementById('add-form').reset();
+            fetchAndRenderLessons(activeCourseId);
+        });
+
+        function fetchAndRenderLessons(courseId) {
+            const lessons = JSON.parse(localStorage.getItem('demo_lessons')).filter(l => l.courseId === courseId);
+            currentLessons = lessons;
+            const container = document.getElementById('lessons-sidebar-list');
+            if (!lessons.length) {
+                container.innerHTML = "<div class='p-8 text-center text-outline-variant'><p class='text-sm mt-2'>لا يوجد محتوى بعد.</p></div>";
+                return;
+            }
+            container.innerHTML = lessons.map(lesson => {
+                let adminControls = isTeacher ? `<button onclick='event.stopPropagation(); editLesson("${lesson.id}")' class='text-primary mx-1'><span class='material-symbols-outlined text-[16px]'>edit</span></button><button onclick='event.stopPropagation(); deleteLesson("${lesson.id}")' class='text-error mx-1'><span class='material-symbols-outlined text-[16px]'>delete</span></button>` : "";
+                return `<div id="sidebar-lesson-${lesson.id}" onclick="openLesson('${lesson.id}')" class="group flex items-start gap-4 p-4 border-b border-outline-variant/10 hover:bg-surface-container-low cursor-pointer transition-colors">
+                    <div class="text-outline group-hover:text-primary"><span class="material-symbols-outlined text-xl">${lesson.icon}</span></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-on-surface dark:text-white truncate">${lesson.title}</h4>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-xs font-bold text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> ${lesson.duration}</span>
+                            <div class='flex'>${adminControls}</div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.deleteLesson = (id) => {
+            if (!confirm('تأكيد الحذف؟')) return;
+            let lessons = JSON.parse(localStorage.getItem('demo_lessons'));
+            localStorage.setItem('demo_lessons', JSON.stringify(lessons.filter(l => l.id !== id)));
+            fetchAndRenderLessons(activeCourseId);
+        };
+
+        window.editLesson = (id) => {
+            const lesson = currentLessons.find(l => l.id === id);
+            editingLessonId = id;
+            document.getElementById('add-title').value = lesson.title;
+            document.getElementById('add-desc').value = lesson.description;
+            document.getElementById('add-duration').value = lesson.duration;
+            document.querySelector(`.type-btn[data-type="${lesson.type}"]`).click();
+            setTimeout(() => { document.getElementById('add-content-val').value = lesson.content; }, 50);
+            toggleModal(addModal, true);
+        };
+
+        let currentTimerInterval = null;
+        window.openLesson = (id) => {
+            if (currentTimerInterval) clearInterval(currentTimerInterval);
+            const lesson = currentLessons.find(l => l.id === id);
+            if (!lesson) return;
+
+            document.querySelectorAll('[id^="sidebar-lesson-"]').forEach(el => el.classList.remove('bg-surface-container-high', 'dark:bg-slate-800'));
+            document.getElementById(`sidebar-lesson-${id}`).classList.add('bg-surface-container-high', 'dark:bg-slate-800');
+
+            const stage = document.getElementById('player-main-stage');
+            stage.className = "w-full aspect-video relative flex items-center justify-center border-b border-outline-variant/20";
+            
+            if (lesson.type === 'video') {
+                stage.classList.add('bg-black');
+                const ytMatch = lesson.content.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/)|[?&]v=)([^&?]{11})/);
+                if (ytMatch) {
+                    stage.innerHTML = `<div class="w-full h-full absolute inset-0"><div id="custom-video-player" data-plyr-provider="youtube" data-plyr-embed-id="${ytMatch[1]}"></div></div>`;
+                    if (window.activePlayer) window.activePlayer.destroy();
+                    window.activePlayer = new Plyr('#custom-video-player', { youtube: { noCookie: true, rel: 0, showinfo: 0 } });
+                } else {
+                    stage.innerHTML = `<iframe class="w-full h-full border-0 absolute inset-0" src="${lesson.content}" allowfullscreen></iframe>`;
+                }
+            } else if (lesson.type === 'lecture') {
+                stage.classList.remove('aspect-video', 'bg-black');
+                stage.classList.add('bg-surface-container-lowest', 'py-16', 'px-8');
+                stage.innerHTML = `<div class='prose dark:prose-invert max-w-4xl w-full text-on-surface whitespace-pre-line leading-loose text-lg'>${lesson.content}</div>`;
+            } else {
+                stage.classList.remove('aspect-video');
+                stage.classList.add('bg-surface-container-lowest', 'py-16', 'px-8');
+                stage.innerHTML = `<div class='text-center w-full max-w-md mx-auto'><span class='material-symbols-outlined text-6xl text-primary mb-4'>quiz</span><h3 class='text-3xl font-black mb-4'>الاختبار</h3><button onclick='alert("في هذه النسخة التجريبية تم تبسيط العرض، الكويز التفاعلي يعمل بشكل كامل في النسخة المدفوعة.")' class='bg-primary text-white py-3 px-8 rounded-xl font-bold mt-4'>بدء الاختبار التجريبي</button></div>`;
+            }
+
+            document.getElementById('active-lesson-title').innerText = lesson.title;
+            document.getElementById('active-lesson-desc').innerText = lesson.description;
+        };
+
+        document.getElementById('teacher-player-add').addEventListener('click', () => {
+            editingLessonId = null; document.getElementById('add-form').reset();
+            document.querySelector('.type-btn[data-type="video"]').click(); toggleModal(addModal, true);
+        });
+
+        // Manage Students (Teacher only)
+        document.getElementById('close-students').addEventListener('click', () => toggleModal(studentsModal, false));
+        manageStudentsBtn.addEventListener('click', () => {
+            fetchAndRenderStudents();
+            toggleModal(studentsModal, true);
+        });
+
+        function fetchAndRenderStudents() {
+            const users = JSON.parse(localStorage.getItem('demo_users')).filter(u => u.role === 'student');
+            const list = document.getElementById('students-list');
+            if (!users.length) { list.innerHTML = "<p class='text-center py-4'>لا يوجد طلاب.</p>"; return; }
+            list.innerHTML = users.map(u => `
+                <div class="flex items-center justify-between gap-3 p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
+                    <div class="text-right flex-1 min-w-0">
+                        <p class="font-bold truncate dark:text-white">${u.email}</p>
+                        <p class="text-xs font-bold mt-1 ${u.isVerified ? 'text-green-500' : 'text-amber-500'}">${u.isVerified ? 'مفعل' : 'قيد الانتظار'}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openAssignModal('${u.uid}', '${u.email}')" class="px-3 py-2 text-xs font-bold rounded-full bg-primary/10 text-primary hover:bg-primary/20">الكورسات</button>
+                        <button onclick="toggleVerify('${u.uid}')" class="px-3 py-2 text-xs font-bold rounded-full ${u.isVerified ? 'bg-error/10 text-error' : 'bg-green-500/10 text-green-600'}">${u.isVerified ? 'إلغاء' : 'تفعيل'}</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.toggleVerify = (uid) => {
+            let users = JSON.parse(localStorage.getItem('demo_users'));
+            const idx = users.findIndex(u => u.uid === uid);
+            users[idx].isVerified = !users[idx].isVerified;
+            localStorage.setItem('demo_users', JSON.stringify(users));
+            fetchAndRenderStudents();
+        };
+
+        window.openAssignModal = (uid, email) => {
+            document.getElementById('assign-student-name').innerText = 'الطالب: ' + email;
+            const courses = JSON.parse(localStorage.getItem('demo_courses'));
+            const list = document.getElementById('assign-courses-list');
+            list.innerHTML = courses.map(c => {
+                const assigned = (c.assignedStudents || []).includes(uid);
+                return `<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
+                    <p class="font-bold dark:text-white truncate flex-1">${c.title}</p>
+                    <button onclick="toggleAssign('${c.id}', '${uid}', '${email}')" class="px-4 py-2 text-sm font-bold rounded-full ${assigned ? 'bg-green-500/10 text-green-600' : 'bg-outline-variant/10 text-outline hover:bg-primary/10 hover:text-primary'}">${assigned ? 'مُعيَّن' : 'تعيين'}</button>
+                </div>`;
+            }).join('') || "<p class='text-center py-4'>لا توجد كورسات.</p>";
+            toggleModal(assignModal, true);
+        };
+
+        window.toggleAssign = (courseId, uid, email) => {
+            let courses = JSON.parse(localStorage.getItem('demo_courses'));
+            const idx = courses.findIndex(c => c.id === courseId);
+            if (!courses[idx].assignedStudents) courses[idx].assignedStudents = [];
+            if (courses[idx].assignedStudents.includes(uid)) {
+                courses[idx].assignedStudents = courses[idx].assignedStudents.filter(id => id !== uid);
+            } else {
+                courses[idx].assignedStudents.push(uid);
+            }
+            localStorage.setItem('demo_courses', JSON.stringify(courses));
+            openAssignModal(uid, email);
+        };
+
+        // Theme and Utils
+        document.getElementById('year').textContent = new Date().getFullYear();
+        const toggleDarkMode = () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+            document.getElementById('theme-icon').textContent = document.documentElement.classList.contains('dark') ? 'light_mode' : 'dark_mode';
+        };
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleDarkMode);
+        document.getElementById('player-theme-btn').addEventListener('click', toggleDarkMode);
+        
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-icon').textContent = 'light_mode';
+        }
+
+        setTimeout(() => checkAuthState(), 200);
+    </script>
+</body>
+</html>
